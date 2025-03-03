@@ -9,7 +9,6 @@ const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'users', loadChildren: usersModule },
 
-    // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];
 

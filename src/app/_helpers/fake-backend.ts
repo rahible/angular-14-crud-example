@@ -5,7 +5,6 @@ import { delay, materialize, dematerialize } from 'rxjs/operators';
 
 import { Role } from '@app/_models';
 
-// array in local storage for registered users
 const usersKey = 'angular-14-crud-example-users';
 const usersJSON = localStorage.getItem(usersKey);
 let users: any[] = usersJSON ? JSON.parse(usersJSON) : [{
@@ -38,12 +37,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 case url.match(/\/users\/\d+$/) && method === 'DELETE':
                     return deleteUser();
                 default:
-                    // pass through any requests not handled above
                     return next.handle(request);
             }    
         }
 
-        // route functions
 
         function getUsers() {
             return ok(users.map(x => basicDetails(x)));
@@ -61,7 +58,6 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 return error(`User with the email ${user.email} already exists`);
             }
 
-            // assign user id and a few other properties then save
             user.id = newUserId();
             delete user.confirmPassword;
             users.push(user);
@@ -78,12 +74,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 return error(`User with the email ${params.email} already exists`);
             }
 
-            // only update password if entered
             if (!params.password) {
                 delete params.password;
             }
 
-            // update and save user
             Object.assign(user, params);
             localStorage.setItem(usersKey, JSON.stringify(users));
 
@@ -96,16 +90,15 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return ok();
         }
 
-        // helper functions
 
         function ok(body?: any) {
             return of(new HttpResponse({ status: 200, body }))
-                .pipe(delay(500)); // delay observable to simulate server api call
+                .pipe(delay(500));
         }
 
         function error(message: any) {
             return throwError(() => ({ error: { message } }))
-                .pipe(materialize(), delay(500), dematerialize()); // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648);
+                .pipe(materialize(), delay(500), dematerialize());
         }
 
         function basicDetails(user: any) {
@@ -125,7 +118,6 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 }
 
 export const fakeBackendProvider = {
-    // use fake backend in place of Http service for backend-less development
     provide: HTTP_INTERCEPTORS,
     useClass: FakeBackendInterceptor,
     multi: true
