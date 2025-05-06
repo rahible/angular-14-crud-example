@@ -7,4 +7,8 @@ export class User {
     lastName?: string;
     email?: string;
     role?: Role;
+
+    constructor(init?: Partial<User>) {
+      Object.assign(this, init);
+    }
 }
