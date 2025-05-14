@@ -1,5 +1,24 @@
-﻿<h1>Users</h1>
+<h1>Users</h1>
 <a routerLink="add" class="btn btn-sm btn-success mb-2">Add User</a>
+
+<!-- Filter Form -->
+<form [formGroup]="filterForm" class="row g-3 mb-3 align-items-end">
+  <div class="col-md-4">
+    <label for="name" class="form-label">Name</label>
+    <input id="name" type="text" formControlName="name" class="form-control" placeholder="Search by name">
+  </div>
+  <div class="col-md-4">
+    <label for="role" class="form-label">Role</label>
+    <select id="role" formControlName="role" class="form-select">
+      <option value="">All Roles</option>
+      <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+    </select>
+  </div>
+  <div class="col-md-4">
+    <button type="button" class="btn btn-secondary" (click)="clearFilters()">Clear Filters</button>
+  </div>
+</form>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -10,7 +29,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of filteredUsers">
             <td>{{user.title}} {{user.firstName}} {{user.lastName}}</td>
             <td>{{user.email}}</td>
             <td>{{user.role}}</td>
@@ -22,7 +41,10 @@
                 </button>
             </td>
         </tr>
-        <tr *ngIf="!users">
+        <tr *ngIf="filteredUsers && filteredUsers.length === 0">
+            <td colspan="4" class="text-center text-muted">No users found.</td>
+        </tr>
+        <tr *ngIf="!filteredUsers">
             <td colspan="4" class="text-center">
                 <span class="spinner-border spinner-border-lg align-center"></span>
             </td>
