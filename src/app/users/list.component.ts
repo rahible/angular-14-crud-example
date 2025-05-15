@@ -3,7 +3,10 @@ import { first } from 'rxjs/operators';
 
 import { UserService } from '@app/_services';
 
-@Component({ templateUrl: 'list.component.html' })
+@Component({
+    templateUrl: 'list.component.html',
+    standalone: false
+})
 export class ListComponent implements OnInit {
     users?: any[];
 
