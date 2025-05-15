@@ -25,7 +25,7 @@ export class AddEditComponent implements OnInit {
 
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
-        
+
         this.form = this.formBuilder.group({
             title: ['', Validators.required],
             firstName: ['', Validators.required],
@@ -77,7 +77,7 @@ export class AddEditComponent implements OnInit {
             })
     }
 
-    private saveUser() {
+    saveUser() {
         return this.id
             ? this.userService.update(this.id!, this.form.value)
             : this.userService.create(this.form.value);
